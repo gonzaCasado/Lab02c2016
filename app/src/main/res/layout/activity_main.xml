@@ -93,7 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirmar"
-            android:id="@+id/buttonConfirmar" />
+            android:id="@+id/buttonConfirmar"
+            android:enabled="false" />
 
         <Button
             android:layout_width="wrap_content"

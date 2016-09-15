@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<ElementoMenu> pedido = new ArrayList<ElementoMenu>();
         Button botonAgregar = (Button) findViewById(R.id.buttonAgregar);
         Button botonReiniciar = (Button) findViewById(R.id.buttonReiniciar);
-        Button botonConfirmar = (Button) findViewById(R.id.buttonConfirmar);
+        final Button botonConfirmar = (Button) findViewById(R.id.buttonConfirmar);
         final TextView itemsAgregados = (TextView) findViewById(R.id.textView3);
         final ListView listaSeleccionada = (ListView) findViewById(R.id.listaSeleccionada);
         final ArrayList<ElementoMenu> lista  = new ArrayList<ElementoMenu>();
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup arg0, int id) {
                 lista.clear();
+                for(int i=0;i<listaSeleccionada.getCount();i++)
+                    listaSeleccionada.setItemChecked(i,false);
 
                 switch (id) {
                     case -1:
@@ -101,16 +103,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int count = listaSeleccionada.getCount();
                 SparseBooleanArray viewItems = listaSeleccionada.getCheckedItemPositions();
+
                 if(confirmado)
                     Toast.makeText(getApplicationContext(), "El pedido ya ha sido confirmado", Toast.LENGTH_LONG).show();
                 else{
                     if(listaSeleccionada.getCheckedItemCount()==0)
                         Toast.makeText(getApplicationContext(), "Debe seleccionar al menos un elemento de menu", Toast.LENGTH_LONG).show();
                     else {
+                        if(!botonConfirmar.isEnabled())
+                            botonConfirmar.setEnabled(true);
                         for (int i = 0; i < count; i++) {
                             if (viewItems.get(i)) {
                                 itemsAgregados.append(listaSeleccionada.getItemAtPosition(i).toString() + "\n");
                                 pedido.add((ElementoMenu) listaSeleccionada.getItemAtPosition(i));
+
                             }
                         }
                     }
@@ -123,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+                botonConfirmar.setEnabled(false);
                 itemsAgregados.setText("");
                 pedido.clear();
                 confirmado = false;
@@ -138,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 Double costo=0.00;
                 if(confirmado)
                     Toast.makeText(getApplicationContext(), "El pedido ya ha sido confirmado", Toast.LENGTH_LONG).show();
+
                 else {
                     for (int i = 0; i < pedido.size(); i++) {
                         costo += pedido.get(i).getPrecio();
